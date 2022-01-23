@@ -12,20 +12,22 @@
     <container id="timerContainer">
         <p id="timer"></p>
     </container>
-    <main class="quiz-main" id="quiz-main">
-        <div><p id="rules"></p></div>
+    <main class="quizMain" id="quizMain">
+        <div><p id="rules">Try to answer the following code-related questions within the time limit. Keep in mind that incorrect answers will penalize your score/time by ten seconds!</p></div>
         <section class="answerList" id="answerList">
             <ul id="answerOptions">
                 <li class="answerButtons" id="answer1"></li>
                 <li class="answerButtons" id="answer2"></li>
                 <li class="answerButtons" id="answer3"></li>
                 <li class="answerButtons" id="answer4"></li>
+                <li class="answerButtons" id="answer5"></li>
             </ul>    
         </section>
         <div class="highScores" id="highScores"></div>
-        <button type="button" id="initialize"></button>
+        <button type="button" id="init"></button>
     </main>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="./script.js"></script>
 
 </html>
