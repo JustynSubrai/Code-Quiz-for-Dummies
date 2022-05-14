@@ -4,30 +4,38 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Trirong">
     <link rel="stylesheet" href="./style.css">
     <title>Document</title>
 </head>
 <body>
-    <h1>Coding Quiz</h1>
-    <container id="timerContainer">
-        <p id="timer"></p>
-    </container>
-    <main class="quizMain" id="quizMain">
-        <div><p id="rules">Try to answer the following code-related questions within the time limit. Keep in mind that incorrect answers will penalize your score/time by ten seconds!</p></div>
-        <section class="answerList" id="answerList">
-            <ul id="answerOptions">
-                <li class="answerButtons" id="answer1"></li>
-                <li class="answerButtons" id="answer2"></li>
-                <li class="answerButtons" id="answer3"></li>
-                <li class="answerButtons" id="answer4"></li>
-                <li class="answerButtons" id="answer5"></li>
-            </ul>    
-        </section>
-        <div class="highScores" id="highScores"></div>
-        <button type="button" id="init"></button>
-    </main>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="./script.js"></script>
+    <div id="nav">
 
+        <div class="left">
+            <a onclick="getScore()" href="#"><h4 >View Highscore</h4></a>
+        </div>
+
+        <div class="right">
+            <h4>Time: <span id="timeLeft">0</span></h4>
+        </div>
+    </div>
+
+    <div id="quiz">
+        <div id="quizBody">      
+            <h1>   
+                Welcome to the Coding Quiz!
+            </h1>
+
+            <p>Try to answer the following code-related questions within the time limit. Keep in mind that incorrect answers will penalize your score/time by ten seconds!</p>
+
+            <h3>
+                Click to play!   
+            </h3>
+            <button onclick="start()">Start Quiz!</button>
+        </div>
+    </div>
+</body>
+
+<script src="script.js" type="text/javascript"></script>
 </html>

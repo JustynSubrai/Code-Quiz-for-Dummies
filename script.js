@@ -1,110 +1,145 @@
-// declared varibles
-let startButton = $('#init')
-let rules = $('#rules')
-let timerCont = $('#timerContainer')
-let timerCountdown= ('#timer')
-let timeLimit = 80;
-let quizMain = $('#quizMain')
-let listEl = $('#answerList')
-let aOne = $('#answer1')
-let aTwo = $('#answer2')
-let aThree = $('#answer3')
-let aFour = $('#answer4')
-let aFive = $('#answer5')
-let scores = $('#highScores')
-let finalScore = 0;
-
 // declare questions for the quiz
-const quizQuestions = [
+let quizQuestions = [
     {
-        question:'Commonly used data types DO Not Include:',
-        choices:['stings', 'booleans','alerts','numbers'],
-        correctAnswer: 'alerts'
+        question: 'Commonly used data types DO Not Include:',
+        choices: ['stings', 'booleans', 'alerts', 'numbers'],
+        answer: 'alerts'
     },
     {
-        question:'The condition in an if/else statement is enclosed with _______.',
-        choices:['quotes','curly braces', 'parenthesis', 'square brackets'],
-        correctAnswer:'parenthesis'
+        question: 'The condition in an if/else statement is enclosed with _______.',
+        choices: ['quotes', 'curly braces', 'parenthesis', 'square brackets'],
+        answer: 'parenthesis'
     },
     {
-        question:'Arrays in JavaScript can be used to store _______.',
-        choices:['numbers and strings','other arrays','booleans','all of the above'],
-        correctAnswer: 'all of the above'
+        question: 'Arrays in JavaScript can be used to store _______.',
+        choices: ['numbers and strings', 'other arrays', 'booleans', 'all of the above'],
+        answer: 'all of the above'
     },
     {
-        question:'String values must be enclosed within ______ when being assigned to variables',
-        choices:['commas','cruly','quotes','parenthesis'],
-        correctAnswer: 'quotes'
+        question: 'String values must be enclosed within ______ when being assigned to letiables',
+        choices: ['commas', 'cruly', 'quotes', 'parenthesis'],
+        answer: 'quotes'
     },
     {
-        question:'A very usefull tool used during development and debegging for printing content to the debugger is:',
-        choices:['JavaScript','terminal/bash','for loops','console log'],
-        correctAnswer: 'console log'
+        question: 'A very usefull tool used during development and debegging for printing content to the debugger is:',
+        choices: ['JavaScript', 'terminal/bash', 'for loops', 'console log'],
+        answer: 'console log'
     },
 ]
 
-let questionIndex = 0;
+// declared letibles
+let score = 0;
+let currentQuestion = -1;
+let timeLeft = 0;
+let timer;
 
-//console.log(quizQuestions)
-//console.log(quizQuestions[1].question)
-//console.log(quizQuestions[1].choices)
-//console.log(quizQuestions[1].correctAnswer)
+//starts countdown on click of start button
 
-function timer(){
-    displayQuestion();
-    let timerInterval = setInterval(function (){
-        timeLimit--;
-            timerCountdown.textContent = 'Timer: ' + timeLimit
-        if (timeLimit === 0 || questionIndex >= 5) {
-            clearInterval(timerInterval);
-            highScores();
-            return;
+function start() {
+    timeLeft = 60;
+    document.getElementById('timeLeft').innerHTML = timeLeft;
+
+    timer = setInterval(function () {
+        timeLeft--;
+        document.getElementById('timeLeft').innerHTML = timeLeft;
+        if (timeLeft <= 0) {
+            clearInterval(timer);
+            endQuiz();
         }
     }, 1000);
+
+    nextQuestion();
 }
 
-function displayQuestion (){
-    startButton.style.display='none';
-    listEl.style.display='block';
-    let questionOutput = quizQuestions[questionIndex].question;
-    let answerChoices = quizQuestions[questionIndex].choices;
-    answerChoices = [aOne,aTwo,aThree,aFour,aFive];
-    aOne.textContent = (quizQuestions[questionIndex].choices[0]);
-    aTwo.textContent = (quizQuestions[questionIndex].choices[1]);
-    aThree.textContent = (quizQuestions[questionIndex].choices[2]);
-    aFour.textContent = (quizQuestions[questionIndex].choices[3]);
-    aFive.textContent = (quizQuestions[questionIndex].choices[4]);
+function endQuiz() {
+    clearInterval(timer);
 
-//add eventListeners to the item list then for loop to cycle through
-    let answerClick = $('li')
-    for(i = 0; i < answerClick.length; i++){
-        answerClick[i].onClick(checkAnswers);
-    }
-    if (questionIndex >= 5) {
+    let quizContent = `
+    <h2> Game Over! </h2>
+    <h3> Your final score is` + score + ` /100 </h3>
+    <input type='text' id='name' placeholder='Enter your name'>
+    <button onclick='setScore()'>Submit</button>`;
+
+    document.getElementById('quizBody').innerHTML = quizContent;
+}
+
+function setScore() {
+    localStorage.setItem('highScore', score);
+    localStorage.setItem('highScoreInput', document.getElementById('name').value);
+    getScore();
+}
+
+function getScore() {
+    let quizContent = `
+    <h2>` + localStorage.getItem('highScoreInput') + `'s highscore is: </h2>
+    <h3>` + localStorage.getItem('highScore') + `</h3><br/>
+    
+    <button onclick='clearScore()'>Clear Score</button> <button onclick='resetQuiz()'>Try Again</button>`;
+
+    document.getElementById('quizBody').innerHTML = quizContent;
+}
+
+function clearScore() {
+    localStorage.setItem('highScore', '');
+    localStorage.setItem('highScoreInput', '');
+
+    resetQuiz();
+}
+
+function resetQuiz() {
+    clearInterval(timer);
+    score = 0;
+    currentQuestion = -1;
+    timeLeft = 0;
+    timer = null;
+
+    document.getElementById('timeLeft').innerHTML = timeLeft;
+
+    let quizContent = `
+    <h2> Welcome to the Coding Quiz! </h2>
+
+    <p>Try to answer the following code-related questions within the time limit. Keep in mind that incorrect answers will penalize your score/time by ten seconds!</p>
+
+    <h3>
+        Click to Start!   
+    </h3>
+    <button onclick="start()">Start!</button>`;
+
+    document.getElementById("quizBody").innerHTML = quizContent;
+}
+
+function incorrect() {
+    timeLeft -= 10;
+    nextQuestion();
+}
+
+function correct() {
+    score += 20;
+    nextQuestion();
+}
+
+function nextQuestion() {
+    currentQuestion++;
+
+    if (currentQuestion > quizQuestions.length - 1) {
+        endQuiz();
         return;
-    };
-}
-//check if answers are correct
-function checkAnswers () {
-    Event.preventDefault()
-    let rightAnswer = Event.target.textContent;
-    let answerMessage = $('p');
-    $(answerMessage).append(listEl);
-    {
-        if (rightAnswer === quizQuestions[questionIndex].correctAnswer){
-            answerMessage.textContent = 'Correct!';
-        }
-        else {
-            answerMessage.textContent = 'Incorrect!';
-            timeLimit = timeLimit -10;
-        }
     }
-    if (questionIndex >= 5) {
-        return;
-    } else {
-        questionIndex++;
-        displayQuestion();
-    }
-}
 
-//set up highScores
+    let quizContent = `
+    <h2>` + quizQuestions[currentQuestion].question + `</h2>`
+
+    for (let i = 0; i < quizQuestions[currentQuestion].choices.length; i++) {
+        let buttonCode = `<button onclick="[ANS]">[CHOICE]</button>";`
+        buttonCode = buttonCode.replace("[CHOICE]", quizQuestions[currentQuestion].choices[i]);
+        if (quizQuestions[currentQuestion].choices[i] == quizQuestions[currentQuestion].answer) {
+            buttonCode = buttonCode.replace("[ANS]", "correct()");
+        } else {
+            buttonCode = buttonCode.replace("[ANS]", "incorrect()");
+        }
+        quizContent += buttonCode
+    }
+
+    document.getElementById("quizBody").innerHTML = quizContent;
+
+}
