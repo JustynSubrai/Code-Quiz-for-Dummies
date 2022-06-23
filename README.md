@@ -6,11 +6,14 @@
 
 # Table of Contents
 * [Description](#description)
+* [Images](#images)
 * [Contact](#contact)
 
 
 # Description
 * This is a coding quiz build using Javascript to access local storage to store highscores and to set up a timer and other functions to affect the timer.
+
+# Images
 
 # Contact
 <a href="https://github.com/JustynSubrai">Github</a>
